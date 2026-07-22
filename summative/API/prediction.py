@@ -6,12 +6,9 @@ _DIR = os.path.dirname(__file__)
 _model = joblib.load(os.path.join(_DIR, "best_model.pkl"))
 _scaler = joblib.load(os.path.join(_DIR, "scaler.pkl"))
 
-# Order matches training features: A1..A10, Age_Mons, then label-encoded
+# Order matches training features: Age_Mons, then label-encoded
 # Sex, Ethnicity, Jaundice, Family_mem_with_ASD.
-FEATURE_ORDER = [
-    "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
-    "Age_Mons", "Sex", "Ethnicity", "Jaundice", "Family_mem_with_ASD",
-]
+FEATURE_ORDER = ["Age_Mons", "Sex", "Ethnicity", "Jaundice", "Family_mem_with_ASD"]
 
 
 def predict(features: list) -> float:
