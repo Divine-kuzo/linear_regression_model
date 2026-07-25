@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -100,11 +101,13 @@ class _PredictionPageState extends State<PredictionPage> {
         'age_group': _ageGroupController.text.trim(),
       });
 
-      final response = await http.post(
-        Uri.parse(_predictUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: body,
-      );
+      final response = await http
+          .post(
+            Uri.parse(_predictUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: body,
+          )
+          .timeout(const Duration(seconds: 45));
 
       final decoded = jsonDecode(response.body);
 
@@ -113,6 +116,8 @@ class _PredictionPageState extends State<PredictionPage> {
       } else {
         setState(() => _errorText = _describeError(decoded));
       }
+    } on TimeoutException {
+      setState(() => _errorText = 'The server took too long to respond. Please try again.');
     } catch (e) {
       setState(() => _errorText = 'Could not reach the server. Please try again.');
     } finally {
@@ -248,7 +253,18 @@ class _PredictionPageState extends State<PredictionPage> {
                 child: const Text('Predict'),
               ),
               const SizedBox(height: 20),
-              if (_isLoading) const Center(child: CircularProgressIndicator()),
+              if (_isLoading)
+                const Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 12),
+                    Text(
+                      'Waking up the server, this can take up to a minute on '
+                      'the first request...',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               if (!_isLoading && _resultText != null)
                 Card(
                   color: Colors.teal.shade50,
