@@ -3,13 +3,21 @@ from typing import Literal
 
 import joblib
 import numpy as np
-from fastapi import FastAPI, HTTPException
+import pandas as pd
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 _DIR = os.path.dirname(__file__)
+_DATA_DIR = os.path.join(_DIR, "..", "linear_regression")
+_TRAINING_DATA_PATH = os.path.join(_DIR, "training_data.csv")
+
 _model = joblib.load(os.path.join(_DIR, "best_model.pkl"))
 _scaler = joblib.load(os.path.join(_DIR, "scaler.pkl"))
 _encoders = joblib.load(os.path.join(_DIR, "encoders.pkl"))
@@ -88,3 +96,84 @@ def predict(payload: PredictRequest):
     X_scaled = _scaler.transform(X)
     prediction = float(_model.predict(X_scaled)[0])
     return {"predicted_result": prediction}
+
+
+def _load_training_data() -> pd.DataFrame:
+    if os.path.exists(_TRAINING_DATA_PATH):
+        return pd.read_csv(_TRAINING_DATA_PATH)
+
+    adult = pd.read_csv(os.path.join(_DATA_DIR, "Autism_Adult_Data.csv"))
+    adult["age_group"] = "adult"
+    child = pd.read_csv(os.path.join(_DATA_DIR, "Autism_Child_Data.csv"))
+    child["age_group"] = "child"
+    adolescent = pd.read_csv(os.path.join(_DATA_DIR, "Autism_Adolescent_Data.csv"))
+    adolescent["age_group"] = "adolescent"
+    df = pd.concat([adult, child, adolescent], ignore_index=True)
+
+    df["ethnicity"] = df["ethnicity"].replace("?", "Unknown")
+    df["relation"] = df["relation"].replace("?", "Unknown")
+    df["age"] = pd.to_numeric(df["age"], errors="coerce")
+    df = df.dropna(subset=["age"])
+    df = df[df["age"] <= 120]
+
+    df = df[FEATURE_ORDER + ["result"]].reset_index(drop=True)
+    df.to_csv(_TRAINING_DATA_PATH, index=False)
+    return df
+
+
+def _encode_df(df: pd.DataFrame) -> pd.DataFrame:
+    encoded = df.copy()
+    for col in FEATURE_ORDER:
+        if col != "age":
+            encoded[col] = _encoders[col].transform(encoded[col])
+    return encoded
+
+
+@app.post("/retrain")
+async def retrain(file: UploadFile = File(...)):
+    global _model, _scaler
+
+    required_cols = set(FEATURE_ORDER + ["result"])
+    try:
+        new_data = pd.read_csv(file.file)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Could not read CSV: {exc}")
+
+    if not required_cols.issubset(new_data.columns):
+        missing = required_cols - set(new_data.columns)
+        raise HTTPException(status_code=400, detail=f"Missing columns: {sorted(missing)}")
+
+    existing_data = _load_training_data()
+    combined = pd.concat(
+        [existing_data, new_data[FEATURE_ORDER + ["result"]]], ignore_index=True
+    )
+
+    try:
+        encoded = _encode_df(combined)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Unseen category in upload: {exc}")
+
+    X = encoded[FEATURE_ORDER]
+    y = encoded["result"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    mse_before = mean_squared_error(y_test, _model.predict(_scaler.transform(X_test)))
+
+    new_scaler = StandardScaler()
+    X_train_scaled = new_scaler.fit_transform(X_train)
+    X_test_scaled = new_scaler.transform(X_test)
+
+    new_model = RandomForestRegressor(random_state=42)
+    new_model.fit(X_train_scaled, y_train)
+    mse_after = mean_squared_error(y_test, new_model.predict(X_test_scaled))
+
+    joblib.dump(new_model, os.path.join(_DIR, "best_model.pkl"))
+    joblib.dump(new_scaler, os.path.join(_DIR, "scaler.pkl"))
+    combined.to_csv(_TRAINING_DATA_PATH, index=False)
+
+    _model = new_model
+    _scaler = new_scaler
+
+    return {"mse_before": mse_before, "mse_after": mse_after}
