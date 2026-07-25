@@ -179,6 +179,9 @@ class _PredictionPageState extends State<PredictionPage> {
     return InputDecoration(labelText: label, filled: true, fillColor: Colors.white);
   }
 
+  TextStyle get _inputTextStyle =>
+      GoogleFonts.nunito(fontWeight: FontWeight.w700, color: BoboColors.textDark, fontSize: 16);
+
   Widget _sectionCard({required Color tintColor, required Widget child}) {
     return Container(
       decoration: BoxDecoration(
@@ -281,26 +284,31 @@ class _PredictionPageState extends State<PredictionPage> {
                     TextFormField(
                       controller: _ageController,
                       keyboardType: TextInputType.number,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Age'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _genderController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Gender (f/m)'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _ethnicityController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Ethnicity'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _contryOfResController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Country of residence'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _ageGroupController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Age group (adult/child/adolescent)'),
                     ),
                   ],
@@ -315,21 +323,25 @@ class _PredictionPageState extends State<PredictionPage> {
                     _sectionTitle('Background', icon: Icons.favorite_rounded, accentColor: BoboColors.tealDark),
                     TextFormField(
                       controller: _jundiceController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Jaundice at birth (yes/no)'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _austimController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Family member with autism (yes/no)'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _usedAppBeforeController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Used screening app before (yes/no)'),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _relationController,
+                      style: _inputTextStyle,
                       decoration: _fieldDecoration('Relation to person screened'),
                     ),
                   ],
