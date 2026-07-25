@@ -56,14 +56,13 @@ class PredictRequest(BaseModel):
 
 app = FastAPI(title="Autism Screening Result Predictor")
 
-# Explicit origin list instead of "*" - allow_credentials=True with a wildcard
-# origin would let any site read responses using a logged-in user's session.
+# Explicit origins plus a regex for local dev ports instead of "*" -
+# allow_credentials=True with a wildcard origin would let any site read
+# responses using a logged-in user's session.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://linear-regression-model-3iyp.onrender.com",
-    ],
+    allow_origins=["https://linear-regression-model-3iyp.onrender.com"],
+    allow_origin_regex=r"http://localhost:\d+|http://127\.0\.0\.1:\d+",
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
     allow_credentials=True,
