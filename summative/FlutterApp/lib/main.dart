@@ -370,8 +370,7 @@ class _PredictionPageState extends State<PredictionPage> {
                     const CircularProgressIndicator(color: BoboColors.coral),
                     const SizedBox(height: 12),
                     Text(
-                      'Waking up the server, this can take up to a minute on '
-                      'the first request...',
+                      'One moment...',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.nunito(color: BoboColors.textDark.withValues(alpha: 0.7)),
                     ),
