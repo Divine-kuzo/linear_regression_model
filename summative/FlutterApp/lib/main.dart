@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'theme.dart';
@@ -157,10 +158,69 @@ class _PredictionPageState extends State<PredictionPage> {
     );
   }
 
+  PreferredSizeWidget _buildHeader() {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(96),
+      child: Container(
+        decoration: BoxDecoration(
+          color: BoboColors.cardBackground,
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
+          boxShadow: [
+            BoxShadow(
+              color: BoboColors.coral.withValues(alpha: 0.15),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [BoboColors.coral, BoboColors.teal]),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.face_rounded, color: Colors.white, size: 26),
+                ),
+                const SizedBox(width: 14),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bobo',
+                      style: GoogleFonts.nunito(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        color: BoboColors.textDark,
+                      ),
+                    ),
+                    Text(
+                      'Autism screening helper',
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        color: BoboColors.textDark.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Autism Screening Predictor')),
+      appBar: _buildHeader(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
