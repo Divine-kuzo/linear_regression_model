@@ -2,9 +2,15 @@ import os
 from typing import Literal
 
 import joblib
+import numpy as np
+from fastapi import FastAPI, HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 _DIR = os.path.dirname(__file__)
+_model = joblib.load(os.path.join(_DIR, "best_model.pkl"))
+_scaler = joblib.load(os.path.join(_DIR, "scaler.pkl"))
 _encoders = joblib.load(os.path.join(_DIR, "encoders.pkl"))
 
 FEATURE_ORDER = [
@@ -37,3 +43,34 @@ class PredictRequest(BaseModel):
     used_app_before: UsedAppLiteral
     relation: RelationLiteral
     age_group: AgeGroupLiteral
+
+
+app = FastAPI(title="Autism Screening Result Predictor")
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(status_code=400, content={"detail": exc.errors()})
+
+
+def _encode_row(payload: PredictRequest) -> np.ndarray:
+    row = []
+    for col in FEATURE_ORDER:
+        value = getattr(payload, col)
+        if col == "age":
+            row.append(float(value))
+        else:
+            row.append(float(_encoders[col].transform([value])[0]))
+    return np.array(row).reshape(1, -1)
+
+
+@app.post("/predict")
+def predict(payload: PredictRequest):
+    try:
+        X = _encode_row(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Could not encode input: {exc}")
+
+    X_scaled = _scaler.transform(X)
+    prediction = float(_model.predict(X_scaled)[0])
+    return {"predicted_result": prediction}
