@@ -42,7 +42,7 @@ ThemeData buildBoboTheme() {
       filled: true,
       fillColor: BoboColors.background,
       contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-      labelStyle: GoogleFonts.nunito(color: BoboColors.textDark.withValues(alpha: 0.7)),
+      labelStyle: GoogleFonts.nunito(color: BoboColors.textDark, fontWeight: FontWeight.w700),
       helperStyle: GoogleFonts.nunito(
         fontSize: 12,
         fontWeight: FontWeight.w500,
