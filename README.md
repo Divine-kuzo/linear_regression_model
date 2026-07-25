@@ -39,3 +39,6 @@ flutter run
 ```
 Pick a device/emulator when prompted. The app is one page: fill in the 9
 fields and tap Predict.
+
+<!-- auto-deploy check -->
+
