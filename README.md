@@ -7,8 +7,8 @@ age, family history, country, jaundice at birth - instead of the full
 where the full test isn't easy to get.
 
 ## Live API
-- API URL: (fill in after deploying)
-- Docs: (fill in after deploying)/docs
+- API URL: https://linear-regression-model-3iyp.onrender.com
+- Docs: https://linear-regression-model-3iyp.onrender.com/docs
 
 ## Demo video
 YouTube link: (add after recording)
