@@ -232,11 +232,8 @@ class _PredictionPageState extends State<PredictionPage> {
                 Container(
                   width: 44,
                   height: 44,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(colors: [BoboColors.coral, BoboColors.teal]),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.face_rounded, color: Colors.white, size: 26),
+                  decoration: const BoxDecoration(color: BoboColors.coral, shape: BoxShape.circle),
+                  child: const Icon(Icons.child_care, color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 14),
                 Column(
