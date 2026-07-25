@@ -30,3 +30,12 @@ Then open `http://127.0.0.1:8000/docs` to try it out.
 
 See `summative/linear_regression/multivariate.ipynb` for the full
 data-cleaning and model-training pipeline.
+
+## Running the Flutter app
+```
+cd summative/FlutterApp
+flutter pub get
+flutter run
+```
+Pick a device/emulator when prompted. The app is one page: fill in the 9
+fields and tap Predict.
