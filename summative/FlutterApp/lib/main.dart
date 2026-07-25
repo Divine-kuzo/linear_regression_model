@@ -40,29 +40,57 @@ class _PredictionPageState extends State<PredictionPage> {
   final _relationController = TextEditingController();
   final _ageGroupController = TextEditingController();
 
+  bool _isLoading = false;
+  String? _resultText;
+  String? _errorText;
+
   Future<void> _predict() async {
-    final body = jsonEncode({
-      'age': num.tryParse(_ageController.text) ?? _ageController.text,
-      'gender': _genderController.text.trim(),
-      'ethnicity': _ethnicityController.text.trim(),
-      'jundice': _jundiceController.text.trim(),
-      'austim': _austimController.text.trim(),
-      'contry_of_res': _contryOfResController.text.trim(),
-      'used_app_before': _usedAppBeforeController.text.trim(),
-      'relation': _relationController.text.trim(),
-      'age_group': _ageGroupController.text.trim(),
+    setState(() {
+      _isLoading = true;
+      _resultText = null;
+      _errorText = null;
     });
 
-    final response = await http.post(
-      Uri.parse(_predictUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+    try {
+      final body = jsonEncode({
+        'age': num.tryParse(_ageController.text) ?? _ageController.text,
+        'gender': _genderController.text.trim(),
+        'ethnicity': _ethnicityController.text.trim(),
+        'jundice': _jundiceController.text.trim(),
+        'austim': _austimController.text.trim(),
+        'contry_of_res': _contryOfResController.text.trim(),
+        'used_app_before': _usedAppBeforeController.text.trim(),
+        'relation': _relationController.text.trim(),
+        'age_group': _ageGroupController.text.trim(),
+      });
 
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${response.statusCode}: ${response.body}')),
-    );
+      final response = await http.post(
+        Uri.parse(_predictUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
+
+      final decoded = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() => _resultText = decoded['predicted_result'].toString());
+      } else {
+        setState(() => _errorText = _describeError(decoded));
+      }
+    } catch (e) {
+      setState(() => _errorText = 'Could not reach the server. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _describeError(dynamic decoded) {
+    final detail = decoded is Map ? decoded['detail'] : null;
+    if (detail is String) return detail;
+    if (detail is List && detail.isNotEmpty) {
+      return detail.map((e) => e is Map ? e['msg'] ?? e.toString() : e.toString()).join('\n');
+    }
+    return 'Invalid input. Please check the values and try again.';
   }
 
   @override
@@ -135,9 +163,33 @@ class _PredictionPageState extends State<PredictionPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _predict,
+                onPressed: _isLoading ? null : _predict,
                 child: const Text('Predict'),
               ),
+              const SizedBox(height: 20),
+              if (_isLoading) const Center(child: CircularProgressIndicator()),
+              if (!_isLoading && _resultText != null)
+                Card(
+                  color: Colors.teal.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'Predicted result: $_resultText',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              if (!_isLoading && _errorText != null)
+                Card(
+                  color: Colors.red.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      _errorText!,
+                      style: TextStyle(color: Colors.red.shade900),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
