@@ -5,6 +5,7 @@ import joblib
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -46,6 +47,19 @@ class PredictRequest(BaseModel):
 
 
 app = FastAPI(title="Autism Screening Result Predictor")
+
+# Explicit origin list instead of "*" - allow_credentials=True with a wildcard
+# origin would let any site read responses using a logged-in user's session.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "https://autism-screening-app.example.com",  # placeholder: deployed Flutter app origin
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
 
 
 @app.exception_handler(RequestValidationError)
