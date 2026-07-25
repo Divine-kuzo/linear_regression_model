@@ -179,6 +179,30 @@ class _PredictionPageState extends State<PredictionPage> {
     return InputDecoration(labelText: label, filled: true, fillColor: Colors.white);
   }
 
+  Widget _sectionCard({required Color tintColor, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: tintColor,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: BoboColors.coral.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          color: Colors.white.withValues(alpha: 0.85),
+          padding: const EdgeInsets.all(22),
+          child: child,
+        ),
+      ),
+    );
+  }
+
   PreferredSizeWidget _buildHeader() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(96),
@@ -248,73 +272,67 @@ class _PredictionPageState extends State<PredictionPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Card(
-                color: BoboColors.softCoral,
-                child: Padding(
-                  padding: const EdgeInsets.all(22),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _sectionTitle('About you', icon: Icons.person_rounded, accentColor: BoboColors.coralDark),
-                      TextFormField(
-                        controller: _ageController,
-                        keyboardType: TextInputType.number,
-                        decoration: _fieldDecoration('Age'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _genderController,
-                        decoration: _fieldDecoration('Gender (f/m)'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _ethnicityController,
-                        decoration: _fieldDecoration('Ethnicity'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _contryOfResController,
-                        decoration: _fieldDecoration('Country of residence'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _ageGroupController,
-                        decoration: _fieldDecoration('Age group (adult/child/adolescent)'),
-                      ),
-                    ],
-                  ),
+              _sectionCard(
+                tintColor: BoboColors.softCoral,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _sectionTitle('About you', icon: Icons.person_rounded, accentColor: BoboColors.coralDark),
+                    TextFormField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: _fieldDecoration('Age'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _genderController,
+                      decoration: _fieldDecoration('Gender (f/m)'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _ethnicityController,
+                      decoration: _fieldDecoration('Ethnicity'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _contryOfResController,
+                      decoration: _fieldDecoration('Country of residence'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _ageGroupController,
+                      decoration: _fieldDecoration('Age group (adult/child/adolescent)'),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),
-              Card(
-                color: BoboColors.softTeal,
-                child: Padding(
-                  padding: const EdgeInsets.all(22),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _sectionTitle('Background', icon: Icons.favorite_rounded, accentColor: BoboColors.tealDark),
-                      TextFormField(
-                        controller: _jundiceController,
-                        decoration: _fieldDecoration('Jaundice at birth (yes/no)'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _austimController,
-                        decoration: _fieldDecoration('Family member with autism (yes/no)'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _usedAppBeforeController,
-                        decoration: _fieldDecoration('Used screening app before (yes/no)'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _relationController,
-                        decoration: _fieldDecoration('Relation to person screened'),
-                      ),
-                    ],
-                  ),
+              _sectionCard(
+                tintColor: BoboColors.softTeal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _sectionTitle('Background', icon: Icons.favorite_rounded, accentColor: BoboColors.tealDark),
+                    TextFormField(
+                      controller: _jundiceController,
+                      decoration: _fieldDecoration('Jaundice at birth (yes/no)'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _austimController,
+                      decoration: _fieldDecoration('Family member with autism (yes/no)'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _usedAppBeforeController,
+                      decoration: _fieldDecoration('Used screening app before (yes/no)'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _relationController,
+                      decoration: _fieldDecoration('Relation to person screened'),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),
