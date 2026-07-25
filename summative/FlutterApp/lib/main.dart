@@ -192,25 +192,19 @@ class _PredictionPageState extends State<PredictionPage> {
 
   Widget _sectionCard({required Color tintColor, required Widget child}) {
     return Container(
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: tintColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: BoboColors.coral.withValues(alpha: 0.12),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: BoboColors.textDark.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          color: Colors.white.withValues(alpha: 0.85),
-          padding: const EdgeInsets.all(22),
-          child: child,
-        ),
-      ),
+      child: child,
     );
   }
 
@@ -284,7 +278,7 @@ class _PredictionPageState extends State<PredictionPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _sectionCard(
-                tintColor: BoboColors.softCoral,
+                tintColor: BoboColors.mutedCoral,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -324,7 +318,7 @@ class _PredictionPageState extends State<PredictionPage> {
               ),
               const SizedBox(height: 24),
               _sectionCard(
-                tintColor: BoboColors.softTeal,
+                tintColor: BoboColors.mutedTeal,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

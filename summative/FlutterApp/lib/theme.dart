@@ -10,6 +10,8 @@ class BoboColors {
   static const cardBackground = Color(0xFFFFFFFF);
   static const softCoral = Color(0xFFFFE4D9);
   static const softTeal = Color(0xFFDFF5F1);
+  static const mutedCoral = Color(0xFFFBEDE6);
+  static const mutedTeal = Color(0xFFE9F3F1);
   static const textDark = Color(0xFF4A3F3A);
 }
 
