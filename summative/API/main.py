@@ -62,7 +62,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://autism-screening-app.example.com",  # placeholder: deployed Flutter app origin
+        "https://linear-regression-model-3iyp.onrender.com",
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
