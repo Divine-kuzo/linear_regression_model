@@ -318,11 +318,19 @@ class _PredictionPageState extends State<PredictionPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _predict,
-                child: const Text('Predict'),
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _predict,
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  child: Text(
+                    'Predict',
+                    style: GoogleFonts.nunito(fontSize: 19, fontWeight: FontWeight.w800),
+                  ),
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               if (_isLoading)
                 const Column(
                   children: [
