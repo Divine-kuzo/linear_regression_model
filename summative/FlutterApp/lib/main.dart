@@ -332,36 +332,62 @@ class _PredictionPageState extends State<PredictionPage> {
               ),
               const SizedBox(height: 24),
               if (_isLoading)
-                const Column(
+                Column(
                   children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 12),
+                    const CircularProgressIndicator(color: BoboColors.coral),
+                    const SizedBox(height: 12),
                     Text(
                       'Waking up the server, this can take up to a minute on '
                       'the first request...',
                       textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(color: BoboColors.textDark.withValues(alpha: 0.7)),
                     ),
                   ],
                 ),
               if (!_isLoading && _resultText != null)
                 Card(
-                  color: Colors.teal.shade50,
+                  color: BoboColors.softTeal,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'Predicted result: $_resultText',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle_rounded, color: BoboColors.tealDark, size: 28),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Text(
+                            'Predicted result: $_resultText',
+                            style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: BoboColors.tealDark,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               if (!_isLoading && _errorText != null)
                 Card(
-                  color: Colors.red.shade50,
+                  color: BoboColors.softCoral,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      _errorText!,
-                      style: TextStyle(color: Colors.red.shade900),
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.error_rounded, color: BoboColors.coralDark, size: 28),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Text(
+                            _errorText!,
+                            style: GoogleFonts.nunito(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: BoboColors.coralDark,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
