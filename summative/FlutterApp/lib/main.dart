@@ -151,17 +151,19 @@ class _PredictionPageState extends State<PredictionPage> {
     super.dispose();
   }
 
-  Widget _sectionTitle(String text, {required IconData icon, required Color accentColor}) {
+  Widget _sectionTitle(String text, {IconData? icon, Color? accentColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-            child: Icon(icon, color: accentColor, size: 20),
-          ),
-          const SizedBox(width: 12),
+          if (icon != null) ...[
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              child: Icon(icon, color: accentColor, size: 20),
+            ),
+            const SizedBox(width: 12),
+          ],
           Text(
             text,
             style: GoogleFonts.nunito(
@@ -320,7 +322,7 @@ class _PredictionPageState extends State<PredictionPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _sectionTitle('Background', icon: Icons.favorite_rounded, accentColor: BoboColors.tealDark),
+                    _sectionTitle('Background'),
                     TextFormField(
                       controller: _jundiceController,
                       style: _inputTextStyle,
