@@ -151,11 +151,32 @@ class _PredictionPageState extends State<PredictionPage> {
     super.dispose();
   }
 
-  Widget _sectionTitle(String text) {
+  Widget _sectionTitle(String text, {required IconData icon, required Color accentColor}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+            child: Icon(icon, color: accentColor, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            text,
+            style: GoogleFonts.nunito(
+              fontWeight: FontWeight.w800,
+              fontSize: 18,
+              color: BoboColors.textDark,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  InputDecoration _fieldDecoration(String label) {
+    return InputDecoration(labelText: label, filled: true, fillColor: Colors.white);
   }
 
   PreferredSizeWidget _buildHeader() {
@@ -223,93 +244,80 @@ class _PredictionPageState extends State<PredictionPage> {
       appBar: _buildHeader(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Card(
+                color: BoboColors.softCoral,
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _sectionTitle('About you'),
+                      _sectionTitle('About you', icon: Icons.person_rounded, accentColor: BoboColors.coralDark),
                       TextFormField(
                         controller: _ageController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Age', border: OutlineInputBorder()),
+                        decoration: _fieldDecoration('Age'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _genderController,
-                        decoration: const InputDecoration(labelText: 'Gender (f/m)', border: OutlineInputBorder()),
+                        decoration: _fieldDecoration('Gender (f/m)'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _ethnicityController,
-                        decoration: const InputDecoration(labelText: 'Ethnicity', border: OutlineInputBorder()),
+                        decoration: _fieldDecoration('Ethnicity'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _contryOfResController,
-                        decoration: const InputDecoration(labelText: 'Country of residence', border: OutlineInputBorder()),
+                        decoration: _fieldDecoration('Country of residence'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _ageGroupController,
-                        decoration: const InputDecoration(
-                          labelText: 'Age group (adult/child/adolescent)',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: _fieldDecoration('Age group (adult/child/adolescent)'),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Card(
+                color: BoboColors.softTeal,
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _sectionTitle('Background'),
+                      _sectionTitle('Background', icon: Icons.favorite_rounded, accentColor: BoboColors.tealDark),
                       TextFormField(
                         controller: _jundiceController,
-                        decoration: const InputDecoration(
-                          labelText: 'Jaundice at birth (yes/no)',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: _fieldDecoration('Jaundice at birth (yes/no)'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _austimController,
-                        decoration: const InputDecoration(
-                          labelText: 'Family member with autism (yes/no)',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: _fieldDecoration('Family member with autism (yes/no)'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _usedAppBeforeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Used screening app before (yes/no)',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: _fieldDecoration('Used screening app before (yes/no)'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _relationController,
-                        decoration: const InputDecoration(
-                          labelText: 'Relation to person screened',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: _fieldDecoration('Relation to person screened'),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isLoading ? null : _predict,
                 child: const Text('Predict'),
