@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'theme.dart';
+import 'valid_values.dart';
 
 const _predictUrl = 'https://linear-regression-model-3iyp.onrender.com/predict';
 
@@ -177,8 +178,13 @@ class _PredictionPageState extends State<PredictionPage> {
     );
   }
 
-  InputDecoration _fieldDecoration(String label) {
-    return InputDecoration(labelText: label, filled: true, fillColor: Colors.white);
+  InputDecoration _fieldDecoration(String label, {List<String>? options}) {
+    return InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: Colors.white,
+      helperText: options == null ? null : 'Accepted: ${options.join(', ')}',
+    );
   }
 
   TextStyle get _inputTextStyle =>
@@ -293,25 +299,25 @@ class _PredictionPageState extends State<PredictionPage> {
                     TextFormField(
                       controller: _genderController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Gender (f/m)'),
+                      decoration: _fieldDecoration('Gender (f/m)', options: BoboValidValues.gender),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _ethnicityController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Ethnicity'),
+                      decoration: _fieldDecoration('Ethnicity', options: BoboValidValues.ethnicity),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _contryOfResController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Country of residence'),
+                      decoration: _fieldDecoration('Country of residence', options: BoboValidValues.contryOfRes),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _ageGroupController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Age group (adult/child/adolescent)'),
+                      decoration: _fieldDecoration('Age group (adult/child/adolescent)', options: BoboValidValues.ageGroup),
                     ),
                   ],
                 ),
@@ -326,25 +332,29 @@ class _PredictionPageState extends State<PredictionPage> {
                     TextFormField(
                       controller: _jundiceController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Jaundice at birth (yes/no)'),
+                      decoration: _fieldDecoration('Jaundice at birth (yes/no)', options: BoboValidValues.jundice),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _austimController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Family member with autism (yes/no)'),
+                      decoration:
+                          _fieldDecoration('Family member with autism (yes/no)', options: BoboValidValues.austim),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _usedAppBeforeController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Used screening app before (yes/no)'),
+                      decoration: _fieldDecoration(
+                        'Used screening app before (yes/no)',
+                        options: BoboValidValues.usedAppBefore,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _relationController,
                       style: _inputTextStyle,
-                      decoration: _fieldDecoration('Relation to person screened'),
+                      decoration: _fieldDecoration('Relation to person screened', options: BoboValidValues.relation),
                     ),
                   ],
                 ),
