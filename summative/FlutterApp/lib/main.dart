@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'theme.dart';
+
 const _predictUrl = 'https://linear-regression-model-3iyp.onrender.com/predict';
 
 void main() {
@@ -16,8 +18,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Autism Screening Predictor',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal)),
+      title: 'Bobo',
+      theme: buildBoboTheme(),
       home: const PredictionPage(),
     );
   }
