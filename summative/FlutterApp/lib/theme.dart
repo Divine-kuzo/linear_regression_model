@@ -70,8 +70,8 @@ ThemeData buildBoboTheme() {
       style: ElevatedButton.styleFrom(
         backgroundColor: BoboColors.coral,
         foregroundColor: Colors.white,
-        elevation: 4,
-        shadowColor: BoboColors.coral.withValues(alpha: 0.4),
+        elevation: 2,
+        shadowColor: BoboColors.textDark.withValues(alpha: 0.25),
         padding: const EdgeInsets.symmetric(vertical: 18),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         textStyle: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w800),
