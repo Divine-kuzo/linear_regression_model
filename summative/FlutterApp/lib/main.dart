@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+const _predictUrl = 'https://linear-regression-model-3iyp.onrender.com/predict';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +39,31 @@ class _PredictionPageState extends State<PredictionPage> {
   final _usedAppBeforeController = TextEditingController();
   final _relationController = TextEditingController();
   final _ageGroupController = TextEditingController();
+
+  Future<void> _predict() async {
+    final body = jsonEncode({
+      'age': num.tryParse(_ageController.text) ?? _ageController.text,
+      'gender': _genderController.text.trim(),
+      'ethnicity': _ethnicityController.text.trim(),
+      'jundice': _jundiceController.text.trim(),
+      'austim': _austimController.text.trim(),
+      'contry_of_res': _contryOfResController.text.trim(),
+      'used_app_before': _usedAppBeforeController.text.trim(),
+      'relation': _relationController.text.trim(),
+      'age_group': _ageGroupController.text.trim(),
+    });
+
+    final response = await http.post(
+      Uri.parse(_predictUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${response.statusCode}: ${response.body}')),
+    );
+  }
 
   @override
   void dispose() {
@@ -102,6 +132,11 @@ class _PredictionPageState extends State<PredictionPage> {
               TextFormField(
                 controller: _ageGroupController,
                 decoration: const InputDecoration(labelText: 'Age group (adult/child/adolescent)'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _predict,
+                child: const Text('Predict'),
               ),
             ],
           ),
