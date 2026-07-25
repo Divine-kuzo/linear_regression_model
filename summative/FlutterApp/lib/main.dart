@@ -44,7 +44,43 @@ class _PredictionPageState extends State<PredictionPage> {
   String? _resultText;
   String? _errorText;
 
+  String? _validate() {
+    final fields = {
+      'Age': _ageController.text,
+      'Gender': _genderController.text,
+      'Ethnicity': _ethnicityController.text,
+      'Jaundice at birth': _jundiceController.text,
+      'Family member with autism': _austimController.text,
+      'Country of residence': _contryOfResController.text,
+      'Used screening app before': _usedAppBeforeController.text,
+      'Relation to person screened': _relationController.text,
+      'Age group': _ageGroupController.text,
+    };
+
+    for (final entry in fields.entries) {
+      if (entry.value.trim().isEmpty) {
+        return '${entry.key} is required.';
+      }
+    }
+
+    final age = num.tryParse(_ageController.text.trim());
+    if (age == null || age < 1 || age > 100) {
+      return 'Age must be a number between 1 and 100.';
+    }
+
+    return null;
+  }
+
   Future<void> _predict() async {
+    final validationError = _validate();
+    if (validationError != null) {
+      setState(() {
+        _resultText = null;
+        _errorText = validationError;
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _resultText = null;
