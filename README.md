@@ -1,26 +1,32 @@
-# Autism Screening Result Prediction
+# Autism Screening Result Predictor
 
-## Mission
-Predict a person's AQ-10 autism screening `result` using only accessible,
-non-behavioral information (age, family history of autism, country of
-residence, jaundice at birth, etc.) rather than the full 10-question
-behavioral interview. This supports lightweight pre-screening in regions or
-families without easy access to the full assessment.
+## What this project does
+This predicts someone's AQ-10 autism screening score using simple info -
+age, family history, country, jaundice at birth - instead of the full
+10-question test. The idea is to help with quick pre-screening in places
+where the full test isn't easy to get.
+
+## Live API
+- API URL: (fill in after deploying)
+- Docs: (fill in after deploying)/docs
+
+## Demo video
+YouTube link: (add after recording)
 
 ## Dataset
-Source: Fadi Thabtah, UCI Machine Learning Repository — Adult, Child, and
-Adolescent Autism Screening Data. The three age-group datasets
-(`Autism_Adult_Data.csv`, `Autism_Child_Data.csv`,
-`Autism_Adolescent_Data.csv`) were merged into a single DataFrame, tagged
-with an `age_group` column, and cleaned down to **1093 rows**.
+Data comes from three UCI datasets by Fadi Thabtah (Adult, Child, and
+Adolescent autism screening). They were merged into one file, tagged with
+an `age_group` column, and cleaned down to 1093 rows. The `A1-A10` answers
+were dropped since `result` is just their sum - keeping them would let the
+model cheat instead of actually predicting anything.
 
-## Why A1–A10 are excluded
-`result` is the arithmetic sum of the ten `A1_Score`–`A10_Score` behavioral
-answers, so including them as features would let the model just re-add them
-up — a trivial, deterministic mapping that requires the very behavioral
-checklist the mission is trying to avoid. They're dropped entirely, along
-with `Class/ASD` (a direct threshold of `result`, i.e. leakage) and `id` (a
-row identifier).
+## Running the API locally
+```
+uv sync
+cd summative/API
+uv run uvicorn main:app --reload
+```
+Then open `http://127.0.0.1:8000/docs` to try it out.
 
-See `summative/linear_regression/multivariate.ipynb` for the full pipeline
-and `summative/API/prediction.py` for the standalone prediction script.
+See `summative/linear_regression/multivariate.ipynb` for the full
+data-cleaning and model-training pipeline.
