@@ -16,7 +16,7 @@ after cleaning.
   in the browser, no setup needed.
 
 ## Demo video
-YouTube link: (add after recording)
+YouTube link: https://youtu.be/lcFCw1PXW-U
 
 ## Dataset
 Data comes from three UCI datasets by Fadi Thabtah (Adult, Child, and
