@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bobo',
       theme: buildBoboTheme(),
+      debugShowCheckedModeBanner: false,
       home: const PredictionPage(),
     );
   }
